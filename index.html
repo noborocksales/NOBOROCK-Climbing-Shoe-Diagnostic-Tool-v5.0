@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- SEO & SNS用 OGP設定 -->
+  <title>クライミングシューズ診断ツール | NOBOROCK渋谷店</title>
+  <meta name="description" content="予算・目的・足型からあなたに最適なクライミングシューズと推奨サイズを自動診断！NOBOROCK渋谷店の在庫に連動。">
+  
+  <meta property="og:title" content="クライミングシューズ診断ツール | NOBOROCK渋谷店">
+  <meta property="og:description" content="予算や目的を選ぶだけで、あなたにぴったりのクライミングシューズと適正サイズを瞬時に診断！">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://noborocksales.github.io/NOBOROCK-Climbing-Shoe-Diagnostic-Tool-v4.3/">
+  <meta property="og:image" content="https://noborocksales.github.io/NOBOROCK-Climbing-Shoe-Diagnostic-Tool-v4.3/ogp-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="クライミングシューズ診断ツール | NOBOROCK渋谷店">
+  <meta name="twitter:description" content="予算・目的・足型からあなたに最適なクライミングシューズと推奨サイズを自動診断！">
+  <meta name="twitter:image" content="https://noborocksales.github.io/NOBOROCK-Climbing-Shoe-Diagnostic-Tool-v4.3/ogp-image.jpg">
+
+  <style>
+    :root {
+      --primary: #d97706;
+      --primary-hover: #b45309;
+      --bg-dark: #0f172a;
+      --card-bg: #1e293b;
+      --text-main: #f8fafc;
+      --text-sub: #94a3b8;
+      --accent: #38bdf8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background-color: var(--bg-dark); color: var(--text-main); line-height: 1.6; padding: 15px; max-width: 600px; margin: 0 auto; }
+    
+    header { text-align: center; margin-bottom: 20px; padding-bottom: 15px; border-bottom: 1px solid var(--border); position: relative; }
+    h1 { font-size: 1.35rem; color: var(--primary); font-weight: 800; }
+    .subtitle { font-size: 0.85rem; color: var(--text-sub); margin-top: 4px; }
+    .intro-desc { font-size: 0.82rem; color: var(--text-sub); margin-top: 6px; line-height: 1.5; }
+
+    .lang-switch {
+      position: absolute; right: 0; top: 0; display: flex; gap: 4px; background: #0f172a; border: 1px solid var(--border); padding: 2px; border-radius: 6px;
+    }
+    .lang-btn {
+      background: none; border: none; color: var(--text-sub); font-size: 0.75rem; font-weight: bold; padding: 4px 8px; border-radius: 4px; cursor: pointer; transition: all 0.2s;
+    }
+    .lang-btn.active { background: var(--primary); color: #fff; }
+
+    .card { background-color: var(--card-bg); border-radius: 12px; padding: 20px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.3); }
+    .step-title { font-size: 1.05rem; font-weight: bold; margin-bottom: 15px; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+    .step-badge { background: var(--primary); color: white; font-size: 0.75rem; padding: 2px 8px; border-radius: 10px; }
+
+    .form-group { margin-bottom: 18px; }
+    .label-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    label { font-size: 0.9rem; font-weight: 600; color: var(--text-main); }
+    
+    .help-icon {
+      display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; background: #334155; color: var(--accent); font-size: 0.8rem; font-weight: bold; border-radius: 50%; cursor: pointer; border: 1px solid var(--accent); transition: all 0.2s; -webkit-tap-highlight-color: transparent; flex-shrink: 0;
+    }
+    .help-icon:hover { background: var(--accent); color: var(--bg-dark); }
+
+    .size-input-wrapper { display: flex; gap: 10px; align-items: center; }
+    .size-input-wrapper input { flex: 2; }
+    .size-input-wrapper select { flex: 1; min-width: 90px; }
+
+    select, input[type="number"], textarea {
+      width: 100%; padding: 12px; background: #0f172a; border: 1px solid var(--border); border-radius: 8px; color: var(--text-main); font-size: 0.95rem; outline: none;
+    }
+    select:focus, input:focus { border-color: var(--primary); }
+
+    .btn-submit {
+      width: 100%; background: var(--primary); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 1.05rem; font-weight: bold; cursor: pointer; transition: background 0.2s; margin-top: 15px;
+    }
+    .btn-submit:hover { background: var(--primary-hover); }
+
+    /* アコーディオン（詳細検索）のスタイル */
+    details {
+      background: #0f172a;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-top: 20px;
+      padding: 12px 15px;
+      transition: all 0.2s ease;
+    }
+    details[open] { border-color: var(--accent); }
+    summary {
+      font-size: 0.95rem; font-weight: bold; color: var(--accent); cursor: pointer; list-style: none;
+      display: flex; justify-content: space-between; align-items: center; user-select: none;
+    }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: '＋'; font-size: 1.1rem; color: var(--accent); }
+    details[open] summary::after { content: '－'; }
+    .details-content { margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border); }
+    .help-text { font-size: 0.78rem; color: var(--text-sub); margin-top: -4px; margin-bottom: 8px; }
+
+    /* モーダルポップアップのスタイル */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(15, 23, 42, 0.85); display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 15px;
+    }
+    .modal-content {
+      background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; width: 100%; max-width: 480px; padding: 20px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); position: relative; animation: modalFadeIn 0.2s ease-out;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .modal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .modal-title { font-size: 1.05rem; font-weight: bold; color: var(--accent); }
+    .modal-close { background: none; border: none; color: var(--text-sub); font-size: 1.5rem; cursor: pointer; padding: 0 5px; line-height: 1; }
+    .modal-close:hover { color: var(--text-main); }
+    .modal-img-container { width: 100%; height: 200px; background: #0f172a; border-radius: 8px; overflow: hidden; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--border); }
+    .modal-img { width: 100%; height: 100%; object-fit: contain; background: #fff; }
+    .modal-desc { font-size: 0.88rem; color: var(--text-main); line-height: 1.6; margin-bottom: 16px; }
+
+    /* 診断結果表示用 */
+    .hidden { display: none !important; }
+    .shoe-card { background: #0f172a; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 20px; }
+    .shoe-img-wrapper { width: 100%; height: 200px; background: #1e293b; overflow: hidden; }
+    .shoe-img { width: 100%; height: 100%; object-fit: cover; }
+    .shoe-info { padding: 16px; }
+    .shoe-brand { font-size: 0.75rem; color: var(--text-sub); font-weight: bold; text-transform: uppercase; }
+    .shoe-name { font-size: 1.1rem; font-weight: bold; margin: 2px 0 6px 0; color: var(--text-main); }
+    .rec-size { font-size: 0.95rem; color: var(--accent); font-weight: bold; margin-bottom: 2px; }
+    .shoe-price { font-size: 0.9rem; color: var(--primary); font-weight: bold; margin-bottom: 10px; }
+    .shoe-desc { font-size: 0.85rem; color: var(--text-sub); margin-bottom: 14px; line-height: 1.5; }
+    .btn-article { display: block; width: 100%; text-align: center; background: var(--primary); color: white; padding: 12px; border-radius: 6px; text-decoration: none; font-weight: bold; font-size: 0.95rem; }
+    .loading-msg { text-align: center; padding: 40px; color: var(--text-sub); font-size: 1rem; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="lang-switch">
+    <button type="button" class="lang-btn active" id="btn-lang-ja" onclick="setLanguage('ja')">JP</button>
+    <button type="button" class="lang-btn" id="btn-lang-en" onclick="setLanguage('en')">EN</button>
+  </div>
+  <h1 id="txt-app-title">NOBOROCK 渋谷店</h1>
+  <div class="subtitle" id="txt-app-subtitle">クライミングシューズ診断ツール</div>
+  <div class="intro-desc" id="txt-app-desc">NOBOROCKの豊富なラインナップの中から、あなたに合った最適なシューズをご提案します。</div>
+</header>
+
+<div id="app">
+  <!-- 診断フォーム -->
+  <div id="view-form" class="card">
+    <div class="step-title"><span class="step-badge" id="txt-step1-badge">STEP 1</span> <span id="txt-step1-title">診断条件の設定</span></div>
+
+    <!-- 1. スニーカーサイズ -->
+    <div class="form-group">
+      <div class="label-row">
+        <label id="lbl-sneaker">1. 普段のスニーカーのサイズ</label>
+        <span class="help-icon" onclick="openModal('sneaker')">?</span>
+      </div>
+      <div class="size-input-wrapper">
+        <input type="number" id="input-sneaker" step="0.5" value="26.0">
+        <select id="input-sneaker-unit" onchange="onSneakerUnitChange()">
+          <option value="cm" selected>cm</option>
+          <option value="EU">EU</option>
+          <option value="US">US</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- 2. クライミング歴・保有靴数 -->
+    <div class="form-group">
+      <div class="label-row">
+        <label id="lbl-level">2. クライミング歴・レベル</label>
+        <span class="help-icon" onclick="openModal('level')">?</span>
+      </div>
+      <select id="input-level">
+        <option value="1" id="opt-lvl1">1足目（初心者・快適性＆足裏感覚重視）</option>
+        <option value="2" selected id="opt-lvl2">2足目（ステップアップ）</option>
+        <option value="3" id="opt-lvl3">3足目以上（中級者・上級者・高パフォーマンス）</option>
+      </select>
+    </div>
+
+    <!-- 3. ご予算の上限 -->
+    <div class="form-group">
+      <div class="label-row">
+        <label id="lbl-budget">3. ご予算の上限</label>
+        <span class="help-icon" onclick="openModal('budget')">?</span>
+      </div>
+      <select id="input-budget">
+        <option value="none" selected id="opt-b-all">すべて（すべての価格帯から探す）</option>
+        <option value="18000" id="opt-b-18">〜18,000円以下（エントリー・コスト重視）</option>
+        <option value="28000" id="opt-b-28">〜28,000円以下（標準・ミドルクラス〜）</option>
+      </select>
+    </div>
+
+    <!-- 4. 履き心地・パフォーマンスの指向 -->
+    <div class="form-group">
+      <div class="label-row">
+        <label id="lbl-style">4. 履き心地・パフォーマンスの指向</label>
+        <span class="help-icon" onclick="openModal('style')">?</span>
+      </div>
+      <select id="input-style-preference">
+        <option value="comfort" id="opt-s-comfort">快適性重視（痛みが少なく長時間の着用でも楽）</option>
+        <option value="balanced" selected id="opt-s-bal">バランス型（適度なフィット感と登破力）</option>
+        <option value="power" id="opt-s-power">集約力・登破力重視（つま先へのパワー伝達力を最優先）</option>
+      </select>
+    </div>
+
+    <!-- 5. モデルの選定方針 -->
+    <div class="form-group">
+      <div class="label-row">
+        <label id="lbl-pop">5. モデルの選定方針</label>
+        <span class="help-icon" onclick="openModal('popularity')">?</span>
+      </div>
+      <select id="input-popularity">
+        <option value="popular" selected id="opt-p-pop">王道・人気モデルを優先したい</option>
+        <option value="any" id="opt-p-any">人気度問わず足に合う隠れた名作も含めたい</option>
+      </select>
+    </div>
+
+    <!-- 6. ソール特性（剛性） -->
+    <div class="form-group">
+      <div class="label-row">
+        <label id="lbl-sole">6. 求めるソール特性（剛性）</label>
+        <span class="help-icon" onclick="openModal('perf')">?</span>
+      </div>
+      <select id="input-sole">
+        <option value="none" selected class="opt-none">指定なし</option>
+        <option value="soft" class="opt-so-s">ソフト（足裏感覚・ボテ重視）</option>
+        <option value="allround" class="opt-so-a">オールラウンド</option>
+        <option value="hard" class="opt-so-h">ハード（点立ち・エッジング重視）</option>
+      </select>
+    </div>
+
+    <!-- 詳細検索（アコーディオン形式） -->
+    <details id="advanced-search-details">
+      <summary id="summary-adv">こだわり足型・詳細条件を指定する（任意）</summary>
+      <div class="details-content">
+        <p class="help-text" id="help-adv">※ご自身の足型やこだわりの条件が分かる場合のみ選択してください。（未選択でも問題なく診断できます）</p>
+
+        <div class="form-group">
+          <div class="label-row">
+            <label id="lbl-width">・足幅（横幅）</label>
+            <span class="help-icon" onclick="openModal('width')">?</span>
+          </div>
+          <select id="input-width">
+            <option value="none" selected class="opt-none">わからない・指定なし</option>
+            <option value="narrow" class="opt-w-nar">細め・スリム</option>
+            <option value="normal" class="opt-w-nor">標準（レギュラー）</option>
+            <option value="wide" class="opt-w-wid">幅広・ワイド</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div class="label-row">
+            <label id="lbl-instep">・甲の高さ</label>
+            <span class="help-icon" onclick="openModal('instep')">?</span>
+          </div>
+          <select id="input-instep">
+            <option value="none" selected class="opt-none">わからない・指定なし</option>
+            <option value="low" class="opt-i-low">甲低め（ローボリューム）</option>
+            <option value="normal" class="opt-i-nor">標準</option>
+            <option value="high" class="opt-i-high">甲高め（ハイボリューム）</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div class="label-row">
+            <label id="lbl-heel">・踵（ヒール）のボリューム</label>
+            <span class="help-icon" onclick="openModal('heel')">?</span>
+          </div>
+          <select id="input-heel">
+            <option value="none" selected class="opt-none">わからない・指定なし</option>
+            <option value="narrow" class="opt-h-nar">小ぶり・細め（脱げにくいヒール希望）</option>
+            <option value="normal" class="opt-h-nor">標準</option>
+            <option value="large" class="opt-h-lar">大きめ・しっかりめ</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <div class="label-row">
+            <label id="lbl-toe">・つま先の形状</label>
+            <span class="help-icon" onclick="openModal('toe')">?</span>
+          </div>
+          <select id="input-toe">
+            <option value="none" selected class="opt-none">わからない・指定なし</option>
+            <option value="egyptian" class="opt-t-egy">エジプト型（親指が一番長い）</option>
+            <option value="greek" class="opt-t-gre">ギリシャ型（人差し指が一番長い）</option>
+            <option value="roman" class="opt-t-rom">スクエア型（指の長さが比較的揃っている）</option>
+          </select>
+        </div>
+      </div>
+    </details>
+
+    <button type="button" class="btn-submit" id="btn-run-diagnosis">診断結果を見る（上位5足）</button>
+  </div>
+
+  <!-- ローディング・結果表示画面 -->
+  <div id="view-loading" class="card hidden">
+    <div class="loading-msg" id="txt-loading">最適なシューズを診断しています...</div>
+  </div>
+
+  <div id="view-result" class="hidden">
+    <h2 style="font-size: 1.05rem; margin-bottom: 12px; color: var(--text-main);" id="txt-top5">あなたにおすすめのシューズ Top 5</h2>
+    <div id="recommendations-container"></div>
+    <button type="button" class="btn-submit" style="background:#334155; margin-bottom:20px;" id="btn-reset" onclick="resetForm()">もう一度診断する</button>
+  </div>
+</div>
+
+<!-- ヘルプポップアップモーダル -->
+<div id="help-modal" class="modal-overlay hidden" onclick="closeModalOnBg(event)">
+  <div class="modal-content">
+    <div class="modal-header">
+      <div class="modal-title" id="modal-title">タイトル</div>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    
+    <div class="modal-img-container" id="modal-img-container">
+      <img id="modal-img" class="modal-img" src="" alt="解説図">
+    </div>
+
+    <div class="modal-desc" id="modal-desc">説明文がここに入ります。</div>
+    <button type="button" class="btn-submit" id="btn-modal-close" onclick="closeModal()" style="margin-top:0; padding:10px;">閉じる</button>
+  </div>
+</div>
+
+<script>
+  const GAS_DATABASE_URL = "YOUR_GAS_WEB_APP_URL_HERE"; // ここにGASのデプロイURLを設定してください
+
+  let currentLang = "ja";
+
+  const HELP_CONTENTS = {
+    sneaker: {
+      ja: { title: "スニーカーサイズ入力", desc: "普段履いているスニーカー（Nike, adidas, Vans等）の実寸サイズを入力してください。クライミングシューズの適正サイズ算出のベース基準となります。" },
+      en: { title: "Sneaker Size Input", desc: "Enter your regular sneaker size (Nike, adidas, Vans, etc.). This serves as the reference baseline for recommending climbing shoe sizes." }
+    },
+    level: {
+      ja: { title: "クライミング歴・レベル", desc: "<b>・1足目</b>：痛みを抑えた足裏感覚重視の快適設計モデル。<br><b>・2足目</b>：傾斜壁や微小ホールドに対応するステップアップモデル。<br><b>・3足目以上</b>：ハイレベルな登破力を追求した上位フラッグシップモデル。" },
+      en: { title: "Climbing Experience Level", desc: "<b>・1st Pair</b>: Comfortable models with minimal pain and high sensitivity.<br><b>・2nd Pair</b>: Step-up shoes built for overhangs and smaller footings.<br><b>・3rd+ Pair</b>: High-performance flagship shoes for advanced climbing." }
+    },
+    budget: {
+      ja: { title: "ご予算の上限", desc: "ご希望の予算範囲で絞り込みを行います。「すべて」を選択すると、価格に関わらず最適なモデルを広くご提案します。" },
+      en: { title: "Maximum Budget", desc: "Filters shoes within your preferred price range. Selecting 'All' provides wider recommendations regardless of price." }
+    },
+    style: {
+      ja: { title: "履き心地・パフォーマンス指向", desc: "<b>・快適性重視</b>：痛みを抑えて長時間のジムトレーニングでも履き続けやすいモデル。<br><b>・集約力重視</b>：つま先にパワーを集中させ、厳しい足場を攻める登破力重視モデル。" },
+      en: { title: "Fit & Performance Focus", desc: "<b>・Comfort Focus</b>: Easier on the feet for long sessions without severe pain.<br><b>・Power Focus</b>: Concentrates power at the toe for challenging footholds." }
+    },
+    popularity: {
+      ja: { title: "モデル選定方針", desc: "<b>・王道・人気モデル優先</b>：多くのクライマーから愛される実績豊富な定番シューズを優先提案します。<br><b>・隠れた名作含む</b>：人気度問わず、あなたの条件に最も適合するモデルを発掘します。" },
+      en: { title: "Model Selection Policy", desc: "<b>・Prioritize Popular</b>: Recommends proven classics loved by many climbers.<br><b>・Include Hidden Gems</b>: Explores any model that matches your feet best regardless of popularity." }
+    },
+    perf: {
+      ja: { title: "求めるソール特性（剛性）", desc: "<b>・ソフト</b>：柔らかく足裏感覚やボテ（ボリューム）への摩擦力が抜群。<br><b>・ハード</b>：剛性が高く、小さなホールドに乗り込んでも足が疲れにくい。<br><b>・オールラウンド</b>：様々な壁に対応するバランス型。" },
+      en: { title: "Sole Stiffness Characteristics", desc: "<b>・Soft</b>: High sensitivity and friction for smears/volumes.<br><b>・Hard</b>: High rigidity for support on micro-edges.<br><b>・All-round</b>: Balanced performance across all wall types." }
+    },
+    width: {
+      ja: { title: "足幅の目安", img: "https://assets.st-note.com/img/1792318616-jDkl8PpvAnNBm59eY6i7gbVq.png?width=1200", desc: "足の裏の最も幅が広い部分（親指と小指の付け根を結ぶライン）です。足幅に合った形状を選ぶことで横方向の痛みを防ぎます。" },
+      en: { title: "Foot Width Guide", img: "https://assets.st-note.com/img/1792318616-jDkl8PpvAnNBm59eY6i7gbVq.png?width=1200", desc: "Refers to the width across the widest part of your forefoot. Prevents lateral pressure pain when properly matched." }
+    },
+    instep: {
+      ja: { title: "甲の高さの目安", img: "https://assets.st-note.com/img/1792318634-ACWSOosLgRNE5wz17dXMBnFt.jpg?width=1200", desc: "足の甲の高さです。甲が高い方はベルクロ周辺の窮屈感を防ぐハイボリューム構造が適しています。" },
+      en: { title: "Instep Height Guide", img: "https://assets.st-note.com/img/1792318634-ACWSOosLgRNE5wz17dXMBnFt.jpg?width=1200", desc: "Refers to the vertical arch height on top of your foot. High insteps benefit from high-volume shoe designs." }
+    },
+    heel: {
+      ja: { title: "踵（ヒール）のボリューム", img: "https://assets.st-note.com/img/1792318730-SXHKFYyv54QVWxjkpcl3ame1.jpg?width=1200", desc: "かかとの大きさや丸みです。かかとに隙間がないフィット感を選ぶことで、ヒールフック時に脱げにくくなります。" },
+      en: { title: "Heel Volume Guide", img: "https://assets.st-note.com/img/1792318730-SXHKFYyv54QVWxjkpcl3ame1.jpg?width=1200", desc: "Refers to the volume of your heel. A snug fit prevents slipping during heel hooks." }
+    },
+    toe: {
+      ja: { title: "つま先の形状（足型タイプ）", img: "https://assets.st-note.com/img/1792319048-jmheNi2IpaJ478SDq5FfZOdo.png?width=1200", desc: "<b>・エジプト型</b>：親指が一番長い。<br><b>・ギリシャ型</b>：人差し指が一番長い。<br><b>・スクエア型</b>：指の長さが比較的揃っている。" },
+      en: { title: "Toe Shape Types", img: "https://assets.st-note.com/img/1792319048-jmheNi2IpaJ478SDq5FfZOdo.png?width=1200", desc: "<b>・Egyptian</b>: Big toe longest.<br><b>・Greek</b>: 2nd toe longest.<br><b>・Square</b>: Toes equal length." }
+    }
+  };
+
+  const I18N = {
+    ja: {
+      title: "NOBOROCK 渋谷店",
+      subtitle: "クライミングシューズ診断ツール",
+      desc: "NOBOROCKの豊富なラインナップの中から、あなたに合った最適なシューズをご提案します。",
+      step1Badge: "STEP 1",
+      step1Title: "診断条件の設定",
+      lblSneaker: "1. 普段のスニーカーのサイズ",
+      lblLevel: "2. クライミング歴・レベル",
+      optLvl1: "1足目（初心者・快適性＆足裏感覚重視）",
+      optLvl2: "2足目（ステップアップ）",
+      optLvl3: "3足目以上（中級者・上級者・高パフォーマンス）",
+      lblBudget: "3. ご予算の上限",
+      optBAll: "すべて（すべての価格帯から探す）",
+      optB18: "〜18,000円以下（エントリー・コスト重視）",
+      optB28: "〜28,000円以下（標準・ミドルクラス〜）",
+      lblStyle: "4. 履き心地・パフォーマンスの指向",
+      optSComf: "快適性重視（痛みが少なく長時間の着用でも楽）",
+      optSBal: "バランス型（適度なフィット感と登破力）",
+      optSPow: "集約力・登破力重視（つま先へのパワー伝達力を最優先）",
+      lblPop: "5. モデルの選定方針",
+      optPPop: "王道・人気モデルを優先したい",
+      optPAny: "人気度問わず足に合う隠れた名作も含めたい",
+      lblSole: "6. 求めるソール特性（剛性）",
+      summaryAdv: "こだわり足型・詳細条件を指定する（任意）",
+      helpAdv: "※ご自身の足型やこだわりの条件が分かる場合のみ選択してください。（未選択でも問題なく診断できます）",
+      lblWidth: "・足幅（横幅）",
+      lblInstep: "・甲の高さ",
+      lblHeel: "・踵（ヒール）のボリューム",
+      lblToe: "・つま先の形状",
+      optNone: "わからない・指定なし",
+      optWNar: "細め・スリム",
+      optWNor: "標準（レギュラー）",
+      optWWid: "幅広・ワイド",
+      optILow: "甲低め（ローボリューム）",
+      optINor: "標準",
+      optIHigh: "甲高め（ハイボリューム）",
+      optHNar: "小ぶり・細め（脱げにくいヒール希望）",
+      optHNor: "標準",
+      optHLar: "大きめ・しっかりめ",
+      optTEgy: "エジプト型（親指が一番長い）",
+      optTGre: "ギリシャ型（人差し指が一番長い）",
+      optTRom: "スクエア型（指の長さが比較的揃っている）",
+      optSoS: "ソフト（足裏感覚・ボテ重視）",
+      optSoA: "オールラウンド",
+      optSoH: "ハード（点立ち・エッジング重視）",
+      btnRun: "診断結果を見る（上位5足）",
+      loading: "最適なシューズを診断しています...",
+      top5: "あなたにおすすめのシューズ Top 5",
+      recSize: "推奨サイズ: ",
+      price: "販売価格: ",
+      tax: "（税込）",
+      btnArticle: "シューズの詳細をチェック!!",
+      btnReset: "もう一度診断する",
+      modalCloseBtn: "閉じる"
+    },
+    en: {
+      title: "NOBOROCK Shibuya",
+      subtitle: "Climbing Shoe Finder",
+      desc: "Find the ideal climbing shoes tailored for you from NOBOROCK's lineup.",
+      step1Badge: "STEP 1",
+      step1Title: "Diagnosis Settings",
+      lblSneaker: "1. Sneaker Size",
+      lblLevel: "2. Climbing Experience / Level",
+      optLvl1: "1st Pair (Beginner / Comfort & Sensitivity)",
+      optLvl2: "2nd Pair (Step-up)",
+      optLvl3: "3rd+ Pair (Intermediate / Advanced / High Performance)",
+      lblBudget: "3. Maximum Budget",
+      optBAll: "All (Explore all price ranges)",
+      optB18: "Under ¥18,000 (Entry / Cost-focused)",
+      optB28: "Under ¥28,000 (Standard / Mid-class〜)",
+      lblStyle: "4. Fit & Performance Preference",
+      optSComf: "Comfort Focus (Less pain, great for long sessions)",
+      optSBal: "Balanced (Moderate fit and climbing power)",
+      optSPow: "Power & Precision Focus (Toe power transmission first)",
+      lblPop: "5. Model Selection Policy",
+      optPPop: "Prioritize mainstream & popular models",
+      optPAny: "Include hidden gems regardless of popularity",
+      lblSole: "6. Sole Stiffness Characteristic",
+      summaryAdv: "Specify Detailed Foot Shape & Conditions (Optional)",
+      helpAdv: "*Select only if you know your specific foot shape. (You can proceed without selecting)",
+      lblWidth: "・Foot Width",
+      lblInstep: "・Instep Height",
+      lblHeel: "・Heel Volume",
+      lblToe: "・Toe Shape",
+      optNone: "Unknown / No Preference",
+      optWNar: "Narrow / Slim",
+      optWNor: "Regular",
+      optWWid: "Wide",
+      optILow: "Low Instep (Low Volume)",
+      optINor: "Regular",
+      optIHigh: "High Instep (High Volume)",
+      optHNar: "Small / Narrow Heel",
+      optHNor: "Regular",
+      optHLar: "Large / Bulky",
+      optTEgy: "Egyptian (Big toe longest)",
+      optTGre: "Greek (2nd toe longest)",
+      optTRom: "Square (Toes relatively equal)",
+      optSoS: "Soft (Sensitivity & Volumes)",
+      optSoA: "All-round",
+      optSoH: "Stiff (Edging Focus)",
+      btnRun: "Get Recommendations (Top 5)",
+      loading: "Finding the best shoes for you...",
+      top5: "Recommended Shoes Top 5 for You",
+      recSize: "Rec. Size: ",
+      price: "Price: ",
+      tax: " (tax incl.)",
+      btnArticle: "Check shoe details!!",
+      btnReset: "Try Again",
+      modalCloseBtn: "Close"
+    }
+  };
+
+  function setLanguage(lang) {
+    currentLang = lang;
+    document.getElementById('btn-lang-ja').classList.toggle('active', lang === 'ja');
+    document.getElementById('btn-lang-en').classList.toggle('active', lang === 'en');
+    
+    const t = I18N[lang];
+    document.getElementById('txt-app-title').innerText = t.title;
+    document.getElementById('txt-app-subtitle').innerText = t.subtitle;
+    document.getElementById('txt-app-desc').innerText = t.desc;
+    document.getElementById('txt-step1-badge').innerText = t.step1Badge;
+    document.getElementById('txt-step1-title').innerText = t.step1Title;
+    document.getElementById('lbl-sneaker').innerText = t.lblSneaker;
+    document.getElementById('lbl-level').innerText = t.lblLevel;
+    document.getElementById('opt-lvl1').innerText = t.optLvl1;
+    document.getElementById('opt-lvl2').innerText = t.optLvl2;
+    document.getElementById('opt-lvl3').innerText = t.optLvl3;
+    document.getElementById('lbl-budget').innerText = t.lblBudget;
+    document.getElementById('opt-b-all').innerText = t.optBAll;
+    document.getElementById('opt-b-18').innerText = t.optB18;
+    document.getElementById('opt-b-28').innerText = t.optB28;
+    document.getElementById('lbl-style').innerText = t.lblStyle;
+    document.getElementById('opt-s-comfort').innerText = t.optSComf;
+    document.getElementById('opt-s-bal').innerText = t.optSBal;
+    document.getElementById('opt-s-power').innerText = t.optSPow;
+    document.getElementById('lbl-pop').innerText = t.lblPop;
+    document.getElementById('opt-p-pop').innerText = t.optPPop;
+    document.getElementById('opt-p-any').innerText = t.optPAny;
+    document.getElementById('lbl-sole').innerText = t.lblSole;
+    document.getElementById('summary-adv').innerText = t.summaryAdv;
+    document.getElementById('help-adv').innerText = t.helpAdv;
+    document.getElementById('lbl-width').innerText = t.lblWidth;
+    document.getElementById('lbl-instep').innerText = t.lblInstep;
+    document.getElementById('lbl-heel').innerText = t.lblHeel;
+    document.getElementById('lbl-toe').innerText = t.lblToe;
+
+    document.querySelectorAll('.opt-none').forEach(el => el.innerText = t.optNone);
+    document.querySelector('.opt-w-nar').innerText = t.optWNar;
+    document.querySelector('.opt-w-nor').innerText = t.optWNor;
+    document.querySelector('.opt-w-wid').innerText = t.optWWid;
+    document.querySelector('.opt-i-low').innerText = t.optILow;
+    document.querySelector('.opt-i-nor').innerText = t.optINor;
+    document.querySelector('.opt-i-high').innerText = t.optIHigh;
+    document.querySelector('.opt-h-nar').innerText = t.optHNar;
+    document.querySelector('.opt-h-nor').innerText = t.optHNor;
+    document.querySelector('.opt-h-lar').innerText = t.optHLar;
+    document.querySelector('.opt-t-egy').innerText = t.optTEgy;
+    document.querySelector('.opt-t-gre').innerText = t.optTGre;
+    document.querySelector('.opt-t-rom').innerText = t.optTRom;
+    document.querySelector('.opt-so-s').innerText = t.optSoS;
+    document.querySelector('.opt-so-a').innerText = t.optSoA;
+    document.querySelector('.opt-so-h').innerText = t.optSoH;
+
+    document.getElementById('btn-run-diagnosis').innerText = t.btnRun;
+    document.getElementById('txt-loading').innerText = t.loading;
+    document.getElementById('txt-top5').innerText = t.top5;
+    document.getElementById('btn-reset').innerText = t.btnReset;
+    document.getElementById('btn-modal-close').innerText = t.modalCloseBtn;
+  }
+
+  function openModal(type) {
+    const item = HELP_CONTENTS[type];
+    if (!item) return;
+    const content = item[currentLang] || item['ja'];
+    
+    document.getElementById('modal-title').innerText = content.title;
+    document.getElementById('modal-desc').innerHTML = content.desc;
+    
+    const imgContainer = document.getElementById('modal-img-container');
+    const imgElement = document.getElementById('modal-img');
+
+    if (content.img) {
+      imgElement.src = content.img;
+      imgContainer.classList.remove('hidden');
+    } else {
+      imgElement.src = "";
+      imgContainer.classList.add('hidden');
+    }
+
+    document.getElementById('help-modal').classList.remove('hidden');
+  }
+
+  function closeModal() {
+    document.getElementById('help-modal').classList.add('hidden');
+  }
+
+  function closeModalOnBg(e) {
+    if (e.target.id === 'help-modal') closeModal();
+  }
+
+  function onSneakerUnitChange() {
+    const unit = document.getElementById('input-sneaker-unit').value;
+    const input = document.getElementById('input-sneaker');
+    if (unit === 'cm') { input.value = "26.0"; input.step = "0.5"; }
+    else if (unit === 'EU') { input.value = "40.5"; input.step = "0.5"; }
+    else if (unit === 'US') { input.value = "8.0"; input.step = "0.5"; }
+  }
+
+  function getNormalizedSneakerCm() {
+    const rawVal = parseFloat(document.getElementById('input-sneaker').value) || 26.0;
+    const unit = document.getElementById('input-sneaker-unit').value;
+    if (unit === 'cm') return rawVal;
+    if (unit === 'EU') return 26.0 + (rawVal - 39.5) * 0.666667;
+    if (unit === 'US') return 26.0 + (rawVal - 8.0) * 1.0;
+    return rawVal;
+  }
+
+  document.getElementById('btn-run-diagnosis').addEventListener('click', async function() {
+    const t = I18N[currentLang];
+    const sneakerCm = getNormalizedSneakerCm();
+    const level = document.getElementById('input-level').value;
+    const budget = document.getElementById('input-budget').value;
+    const stylePref = document.getElementById('input-style-preference').value;
+    const popularity = document.getElementById('input-popularity').value;
+    const sole = document.getElementById('input-sole').value;
+
+    const width = document.getElementById('input-width').value;
+    const instep = document.getElementById('input-instep').value;
+    const heel = document.getElementById('input-heel').value;
+    const toe = document.getElementById('input-toe').value;
+
+    document.getElementById('view-form').classList.add('hidden');
+    document.getElementById('view-loading').classList.remove('hidden');
+
+    const params = new URLSearchParams({
+      sneakerCm, level, budget, stylePref, popularity, sole, width, instep, heel, toe
+    });
+
+    try {
+      const response = await fetch(`${GAS_DATABASE_URL}?${params.toString()}`);
+      const shoes = await response.json();
+      
+      const container = document.getElementById('recommendations-container');
+      container.innerHTML = "";
+
+      shoes.forEach((shoe, idx) => {
+        const card = document.createElement('div');
+        card.className = 'shoe-card';
+        card.innerHTML = `
+          <div class="shoe-img-wrapper"><img src="${shoe.imageUrl || ''}" class="shoe-img" alt="${shoe.name}"></div>
+          <div class="shoe-info">
+            <div class="shoe-brand">${shoe.brand || ''}</div>
+            <div class="shoe-name">Rank #${idx + 1} : ${shoe.name}</div>
+            <div class="rec-size">${t.recSize}${shoe.recommendedSizeCm} cm</div>
+            <div class="shoe-price">${t.price}￥${Number(shoe.price || 0).toLocaleString()}${t.tax}</div>
+            <div class="shoe-desc">${shoe.description || ''}</div>
+            ${shoe.articleUrl ? `<a href="${shoe.articleUrl}" target="_blank" class="btn-article">${t.btnArticle}</a>` : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      document.getElementById('view-loading').classList.add('hidden');
+      document.getElementById('view-result').classList.remove('hidden');
+    } catch (err) {
+      alert(currentLang === 'en' ? "Failed to fetch data." : "データの取得に失敗しました。");
+      resetForm();
+    }
+  });
+
+  function resetForm() {
+    document.getElementById('view-result').classList.add('hidden');
+    document.getElementById('view-loading').classList.add('hidden');
+    document.getElementById('view-form').classList.remove('hidden');
+  }
+</script>
+
+</body>
+</html>
